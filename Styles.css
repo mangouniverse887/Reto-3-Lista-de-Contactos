@@ -1,0 +1,153 @@
+/* Colores principales del tema vampiro */
+:root{
+    --negro: #0a0407;
+    --rojo: #c1121f;
+    --rojo-oscuro: #8b0a1a;
+    --morado: #5b2a86;
+    --morado-claro: #b78cf0;
+    --verde: #5dff7a;
+    --texto: #ece3e6;
+}
+
+::selection{
+    background: var(--morado);
+    color: var(--verde);
+}
+
+body{
+    color: var(--texto);
+    font-family: Arial, sans-serif;
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 0 16px;
+    background-color: var(--negro);
+}
+
+h1{
+    font-family: "UnifrakturCook", Georgia, serif;
+    font-size: 3rem;
+    text-align: center;
+    color: var(--rojo);
+    text-shadow: 0 0 14px var(--rojo-oscuro);
+    margin-bottom: 8px;
+}
+
+/* Línea morada y verde bajo el título (detalle del Halloween morado) */
+h1::after{
+    content: "";
+    display: block;
+    width: 120px;
+    height: 3px;
+    margin: 10px auto 0;
+    background: linear-gradient(90deg, var(--morado), var(--verde));
+    border-radius: 2px;
+}
+
+.subtitulo{
+    text-align: center;
+    color: var(--morado-claro);
+    margin: 0 0 22px;
+}
+
+#mensaje{
+    text-align: center;
+}
+
+.error{
+    color: #ff6b81;
+    font-weight: bold;
+}
+
+/* Tabla */
+table{
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #150a10;
+    border: 1px solid var(--rojo-oscuro);
+}
+
+th{
+    padding: 14px;
+    text-align: left;
+    color: white;
+    background: linear-gradient(90deg, var(--rojo-oscuro), var(--morado));
+    border-bottom: 3px solid var(--rojo);
+}
+
+td{
+    padding: 12px 14px;
+    border-bottom: 1px solid #2a1520;
+}
+
+tbody tr:nth-child(even){
+    background-color: #1d0d1a;
+}
+
+tbody tr:hover{
+    background-color: var(--rojo-oscuro);
+}
+
+/* Nombre en verde y empresa en morado */
+td:first-child{
+    color: var(--verde);
+    font-weight: bold;
+}
+
+td:last-child{
+    color: var(--morado-claro);
+}
+
+/* El botón del nombre se ve como texto */
+td button{
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    text-align: inherit;
+    background: none;
+    border: 0;
+    cursor: pointer;
+}
+
+td button:focus-visible{
+    outline: 2px solid var(--verde);
+    outline-offset: 3px;
+}
+
+/* Diseño responsivo: en celular cada fila se vuelve una tarjeta */
+@media (max-width: 700px){
+    h1{
+        font-size: 2.2rem;
+    }
+
+    thead{
+        display: none;
+    }
+
+    table, tbody, tr, td{
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    tr{
+        margin-bottom: 14px;
+        border: 1px solid var(--rojo-oscuro);
+        border-radius: 8px;
+    }
+
+    td{
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        text-align: right;
+        overflow-wrap: anywhere;
+    }
+
+    /* Muestra el nombre de la columna usando data-label */
+    td::before{
+        content: attr(data-label);
+        color: var(--rojo);
+        font-weight: bold;
+        text-align: left;
+    }
+}
