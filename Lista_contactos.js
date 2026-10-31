@@ -1,10 +1,57 @@
 const url = "https://jsonplaceholder.typicode.com/users";
 const tabla = document.getElementById("tabla-usuarios");
 const mensaje = document.getElementById("mensaje");
+const contador = document.querySelector("contador-mordidos");
 
 const CLAVE = "usuariosMordidos";
 let totalUsuarios = 0;
 const filas = new Map(); // id del usuario -> fila de la tabla
+
+//Recuperar los ids marcados desde LocalStorage
+function cargarMordidos() {
+    const guardado = localStorage.getItem(CLAVE);
+    if (guardado === null) return [];
+    try {
+        const lista = JSON.parse(guardado);
+        return Array.isArray(lista) ? lista : [];
+    } catch {
+        return [];
+    }
+}
+
+let mordidos = cargarMordidos();
+
+function guardarMordidos() {
+    localStorage.setItem(CLAVE, JSON.stringify(mordidos));
+}
+
+function actualizarContador() {
+    contador.actualizar(mordidos.length, totalUsuarios);
+}
+
+//Marcar o desmarcar un usuario
+function alternarMordido(id) {
+    const fila = filas.get(id);
+    const yaMordido = mordidos.includes(id);
+
+    mordidos = yaMordido ? mordidos.filter((m) => m !== id) : [...mordidos, id];
+    fila.classList.toggle("mordido", !yaMordido);
+    fila.querySelector("button").setAttribute("aria-pressed", String(!yaMordido));
+
+    guardarMordidos();
+    actualizarContador();
+}
+
+//Escuchar el evento personalizado del Web Component
+contador.addEventListener("limpiar-marcas", () => {
+    mordidos = [];
+    guardarMordidos();
+    filas.forEach((fila) => {
+        fila.classList.remove("mordido");
+        fila.querySelector("button").setAttribute("aria-pressed", "false");
+    });
+    actualizarContador();
+});
 
 //Ejecutar la consulta
 fetch(url)
@@ -50,9 +97,17 @@ fetch(url)
             fila.appendChild(telefono);
             fila.appendChild(empresa);
 
+            //Restaurar la marca guardada
+            if (mordidos.includes(usuario.id)) {
+                fila.classList.add("mordido");
+                boton.setAttribute("aria-pressed", "true");
+            }
+
             filas.set(usuario.id, fila);
             tabla.appendChild(fila);
         });
+
+        actualizarContador();
 
         //Mensaje de éxito en consola
         console.log("Los datos fueron obtenidos correctamente de:", url);
